@@ -13,11 +13,14 @@ namespace SkeletalTracking
 {
     class SkeletonController
     {
-        private MainWindow window;
+        //Scaling constants
+        public float k_xMaxJointScale = 1.5f;
+        public float k_yMaxJointScale = 1.5f;
+        private FunControl window;
 
-        public SkeletonController(MainWindow win)
+        public SkeletonController(FunControl win)
         {
-            window = win; 
+            window = new FunControl(); 
         }
 
         //This function will be implemented by you in the subclass files provided.
@@ -81,82 +84,6 @@ namespace SkeletalTracking
             window.k_xMaxJointScale = f;
             window.k_yMaxJointScale = f;
         }
-
-    }
-
-    public class Target
-    {
-        public int id;
-
-        private Brush _target_color;
-        private TextBlock _canvasEl;
-        
-
-        public Target(TextBlock target, int givenID)
-        {
-            _target_color = new SolidColorBrush(Colors.Red);
-            _canvasEl = target;
-            id = givenID;
-            showTarget();
-        }
-        public void setTargetPosition(double x, double y)
-        {
-            _canvasEl.SetValue(Canvas.LeftProperty, x);
-            _canvasEl.SetValue(Canvas.TopProperty, y);
-        }
-
-        public void setTargetHighlighted()
-        {
-            _target_color = new SolidColorBrush(Color.FromRgb(238, 221, 130));
-            _canvasEl.Background = new VisualBrush(generateEllipse((double)_canvasEl.GetValue(Canvas.WidthProperty) / 2, _target_color));
-        }
-
-        public void setTargetSelected()
-        {
-            _target_color = new SolidColorBrush(Color.FromRgb(34, 139, 34));
-            _canvasEl.Background = new VisualBrush(generateEllipse((double)_canvasEl.GetValue(Canvas.WidthProperty) / 2, _target_color));
-        }
-
-        public void setTargetUnselected()
-        {
-            _target_color = new SolidColorBrush(Colors.Red);
-            _canvasEl.Background = new VisualBrush(generateEllipse((double)_canvasEl.GetValue(Canvas.WidthProperty) / 2, _target_color)); 
-        }
-
-        public void hideTarget()
-        {
-            _canvasEl.Visibility = Visibility.Hidden;
-        }
-
-        public void showTarget()
-        {
-            _canvasEl.Visibility = Visibility.Visible;
-        }
-        public bool isHidden()
-        {
-            return _canvasEl.Visibility != Visibility.Visible;
-        }
-
-        public double getXPosition()
-        {
-            return (double)_canvasEl.GetValue(Canvas.LeftProperty) + ((double)_canvasEl.GetValue(Canvas.WidthProperty) / 2);
-        }
-
-        public double getYPosition()
-        {           
-            return (double)_canvasEl.GetValue(Canvas.TopProperty) + ((double)_canvasEl.GetValue(Canvas.WidthProperty) / 2);
-        }
-
-        private Ellipse generateEllipse(double r, Brush color){
-            var circle = new Ellipse();
-            circle.Width = r * 2;
-            circle.Height = r * 2;
-            circle.Stroke = new SolidColorBrush(Colors.Black);
-            circle.StrokeThickness = 1;
-            circle.Fill = color;
-            return circle;
-        }
-
 
     }
 }
