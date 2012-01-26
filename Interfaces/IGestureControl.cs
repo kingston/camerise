@@ -8,6 +8,9 @@ namespace SkeletalTracking.Interfaces
 {
     interface IGestureControl
     {
+        /// <summary>
+        /// Called when the control is activated in the main window
+        /// </summary>
         void activateControl();
 
         void processVideoFrame(ImageFrameReadyEventArgs e);

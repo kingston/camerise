@@ -6,6 +6,9 @@ using Microsoft.Research.Kinect.Nui;
 
 namespace SkeletalTracking.Gestures
 {
+    /// <summary>
+    /// Provides methods to recognize a set of IGestures via events while processing skeleton frames
+    /// </summary>
     public class GestureRecognizer
     {
         private const double THRESHOLD = 0.8;
@@ -23,11 +26,19 @@ namespace SkeletalTracking.Gestures
             gestures = new List<IGesture>();
         }
 
+        /// <summary>
+        /// Adds a gesture to the gesture recognizer's set of gestures to recognize
+        /// </summary>
+        /// <param name="gesture">The gesture to add</param>
         public void AddGesture(IGesture gesture)
         {
             gestures.Add(gesture);
         }
 
+        /// <summary>
+        /// Processes a skeleton frame from the Kinect controller
+        /// </summary>
+        /// <param name="frame">The skeleton frame to process</param>
         public void ProcessSkeleton(SkeletonFrame frame)
         {
             // Get first skeleton
@@ -71,6 +82,9 @@ namespace SkeletalTracking.Gestures
         }
     }
 
+    /// <summary>
+    /// The event arguments for gesture events (containing the currently selected gesture)
+    /// </summary>
     public class GestureEventArgs
     {
         public GestureEventArgs(IGesture gesture)
@@ -78,6 +92,9 @@ namespace SkeletalTracking.Gestures
             this.Gesture = gesture;
         }
 
+        /// <summary>
+        /// The currently active gesture relative to the event
+        /// </summary>
         public IGesture Gesture { get; set; }
     }
 }
