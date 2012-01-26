@@ -10,14 +10,14 @@ namespace SkeletalTracking.Gestures
     {
         void Activate();
 
-        double GetTriggerScore(SkeletonFrame frame);
-
-        bool IsOut(SkeletonFrame frame);
-
-        bool IsComplete(SkeletonFrame frame);
-
         void Deactivate();
 
-        bool Active { get; set; }
+        double GetTriggerScore(SkeletonData frame);
+
+        bool IsOut(SkeletonData frame);
+
+        bool IsComplete(SkeletonData frame);
+
+        bool Active { get; }
     }
 }

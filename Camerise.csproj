@@ -78,6 +78,7 @@
     <Compile Include="FunController.cs" />
     <Compile Include="Gestures\GestureRecognizer.cs" />
     <Compile Include="Gestures\IGesture.cs" />
+    <Compile Include="Gestures\SwipeGesture.cs" />
     <Compile Include="SampleControl.xaml.cs">
       <DependentUpon>SampleControl.xaml</DependentUpon>
     </Compile>

@@ -47,10 +47,10 @@ namespace SkeletalTracking
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             recognizer = new GestureRecognizer();
-            recognizer.GestureRecognized += new GestureRecognizer.GestureRecognizedHandler(recognizer_GestureRecognized);
+            recognizer.GestureCompleted += new GestureRecognizer.GestureEventHandler(recognizer_GestureCompleted);
         }
 
-        void recognizer_GestureRecognized(object sender, GestureRecognizedEventArgs e)
+        void recognizer_GestureCompleted(object sender, GestureEventArgs e)
         {
             MessageBox.Show("I got a gesture! " + e.Gesture.GetType().Name);
         }

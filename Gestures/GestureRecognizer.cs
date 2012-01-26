@@ -13,8 +13,10 @@ namespace SkeletalTracking.Gestures
         private List<IGesture> gestures;
         private IGesture activeGesture;
 
-        public delegate void GestureRecognizedHandler(object sender, GestureRecognizedEventArgs e);
-        public event GestureRecognizedHandler GestureRecognized;
+        public delegate void GestureEventHandler(object sender, GestureEventArgs e);
+        public event GestureEventHandler GestureStarted;
+        public event GestureEventHandler GestureLeft;
+        public event GestureEventHandler GestureCompleted;
 
         public GestureRecognizer()
         {
@@ -28,16 +30,20 @@ namespace SkeletalTracking.Gestures
 
         public void ProcessSkeleton(SkeletonFrame frame)
         {
+            // Get first skeleton
+            SkeletonData skeleton = (from s in frame.Skeletons where s.TrackingState == SkeletonTrackingState.Tracked select s).FirstOrDefault();
+
             if (activeGesture != null)
             {
-                if (activeGesture.IsComplete(frame))
+                if (activeGesture.IsComplete(skeleton))
                 {
-                    GestureRecognized.Invoke(this, new GestureRecognizedEventArgs(activeGesture));
+                    GestureCompleted.Invoke(this, new GestureEventArgs(activeGesture));
                     activeGesture.Deactivate();
                     activeGesture = null;
                 }
-                else if (activeGesture.IsOut(frame))
+                else if (activeGesture.IsOut(skeleton))
                 {
+                    GestureLeft.Invoke(this, new GestureEventArgs(activeGesture));
                     activeGesture.Deactivate();
                     activeGesture = null;
                 }
@@ -48,7 +54,7 @@ namespace SkeletalTracking.Gestures
                 IGesture maxGesture = null;
                 foreach (IGesture gesture in gestures)
                 {
-                    double score = gesture.GetTriggerScore(frame);
+                    double score = gesture.GetTriggerScore(skeleton);
                     if (score > Math.Max(maxScore, THRESHOLD))
                     {
                         maxScore = score;
@@ -58,15 +64,16 @@ namespace SkeletalTracking.Gestures
                 if (maxGesture != null)
                 {
                     activeGesture = maxGesture;
+                    GestureStarted.Invoke(this, new GestureEventArgs(activeGesture));
                     activeGesture.Activate();
                 }
             }
         }
     }
 
-    public class GestureRecognizedEventArgs
+    public class GestureEventArgs
     {
-        public GestureRecognizedEventArgs(IGesture gesture)
+        public GestureEventArgs(IGesture gesture)
         {
             this.Gesture = gesture;
         }
