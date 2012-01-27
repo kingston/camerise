@@ -6,6 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="480" d:DesignWidth="640">
     <Grid Loaded="Grid_Loaded">
-            
+        <Canvas Name="MainCanvas" Height="480" Width="640">
+            <Image Opacity="0.1" Canvas.Left="0" Canvas.Top="0" Height="480 " Name="uxBackgroundImage" Stretch="Fill" Width="640" />
+            <Label Content="No data detected" Height="307" HorizontalAlignment="Left" Margin="52,350,0,0" Name="uxDiagnosticLabel" VerticalAlignment="Top" Width="323" Canvas.Left="-25" Canvas.Top="-270" />
+        </Canvas>
     </Grid>
 </UserControl>

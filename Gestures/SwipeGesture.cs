@@ -7,34 +7,34 @@ using Coding4Fun.Kinect.Wpf;
 
 namespace SkeletalTracking.Gestures
 {
-    class SwipeGesture : IGesture
+    class SwipeGesture : BaseGesture
     {
-        public void Activate()
+        public override double GetTriggerScore(SkeletonData skeleton)
         {
-            this.Active = true;
-        }
+            Joint handRight = skeleton.Joints[JointID.HandRight];
+            Joint elbowRight = skeleton.Joints[JointID.ElbowRight];
+            Joint central = skeleton.Joints[JointID.Spine];
 
-        public void Deactivate()
-        {
-            this.Active = false;
-        }
+            Vector boundingBox = CreateVector(0.2f, 0.2f, 10.0f);
+            Vector relativeToCentral = CreateVector(-0.3f, 0.6f, 0.3f);
 
-        public double GetTriggerScore(SkeletonData skeleton)
-        {
-            Joint handRight = skeleton.Joints[JointID.HandRight].ScaleTo(640, 480);
+            if (IsInBoundingBox(handRight.Position, central.Position, relativeToCentral, boundingBox))
+            {
+                return 1.0;
+            }
             return 0.0;
         }
 
-        public bool IsOut(SkeletonData skeleton)
+        public override bool IsOut(SkeletonData skeleton)
         {
+            if (!Active) return false;
             return false;
         }
 
-        public bool IsComplete(SkeletonData skeleton)
+        public override bool IsComplete(SkeletonData skeleton)
         {
-            return false;
+            if (!Active) return false;
+            return true;
         }
-
-        public bool Active { get; private set; }
     }
 }

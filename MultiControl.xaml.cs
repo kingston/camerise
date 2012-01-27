@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Research.Kinect.Nui;
+using Coding4Fun.Kinect.Wpf;
 using SkeletalTracking.Gestures;
 
 namespace SkeletalTracking
@@ -21,22 +22,52 @@ namespace SkeletalTracking
     /// </summary>
     public partial class MultiControl : UserControl, Interfaces.IGestureControl
     {
+        private Boolean DEBUG_MODE = true;
+
         private GestureRecognizer recognizer;
 
         public MultiControl()
         {
             InitializeComponent();
-            recognizer = new GestureRecognizer();
         }
 
         public void processVideoFrame(ImageFrameReadyEventArgs e)
         {
-            //throw new NotImplementedException();
+            //Automagically create BitmapSource for Video
+            uxBackgroundImage.Source = e.ImageFrame.ToBitmapSource();
         }
 
         public void processSkeletonFrame(SkeletonFrame frame)
         {
-            recognizer.ProcessSkeleton(frame);
+            // Get first skeleton
+            SkeletonData skeleton = (from s in frame.Skeletons where s.TrackingState == SkeletonTrackingState.Tracked select s).FirstOrDefault();
+
+            if (skeleton != null)
+            {
+                // Output diagnostic info
+                if (DEBUG_MODE)
+                {
+                    String diagnosticInfo = "Diagnostic Info:\n";
+                    JointID[] diagIDs = { JointID.HandRight, JointID.ElbowRight, JointID.Spine };
+                    foreach (var id in diagIDs)
+                    {
+                        diagnosticInfo += getJointString(skeleton, id);
+                    }
+                    uxDiagnosticLabel.Content = diagnosticInfo;
+                }
+                recognizer.ProcessSkeleton(skeleton);
+            }
+            else
+            {
+                uxDiagnosticLabel.Content = "No skeleton detected currently";
+            }
+        }
+
+        private string getJointString(SkeletonData skeleton, JointID jointID)
+        {
+            Joint jt = skeleton.Joints[jointID];
+            var pos = jt.Position;
+            return jointID.ToString() + ": (" + pos.X + ", " + pos.Y + ", " + pos.Z + ")\n";
         }
 
         public void activateControl()
@@ -47,6 +78,9 @@ namespace SkeletalTracking
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             recognizer = new GestureRecognizer();
+            recognizer.AddGesture(new SwipeGesture());
+            recognizer.AddGesture(new ShutterGesture());
+            recognizer.AddGesture(new ThrustGesture());
             recognizer.GestureCompleted += new GestureRecognizer.GestureEventHandler(recognizer_GestureCompleted);
         }
 

@@ -76,6 +76,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FunController.cs" />
+    <Compile Include="Gestures\BaseGesture.cs" />
+    <Compile Include="Gestures\ThrustGesture.cs" />
+    <Compile Include="Gestures\ShutterGesture.cs" />
     <Compile Include="Gestures\GestureRecognizer.cs" />
     <Compile Include="Gestures\IGesture.cs" />
     <Compile Include="Gestures\SwipeGesture.cs" />

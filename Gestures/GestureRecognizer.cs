@@ -39,22 +39,25 @@ namespace SkeletalTracking.Gestures
         /// Processes a skeleton frame from the Kinect controller
         /// </summary>
         /// <param name="frame">The skeleton frame to process</param>
-        public void ProcessSkeleton(SkeletonFrame frame)
+        public void ProcessSkeleton(SkeletonData skeleton)
         {
-            // Get first skeleton
-            SkeletonData skeleton = (from s in frame.Skeletons where s.TrackingState == SkeletonTrackingState.Tracked select s).FirstOrDefault();
-
             if (activeGesture != null)
             {
                 if (activeGesture.IsComplete(skeleton))
                 {
-                    GestureCompleted.Invoke(this, new GestureEventArgs(activeGesture));
+                    if (GestureCompleted != null)
+                    {
+                        GestureCompleted.Invoke(this, new GestureEventArgs(activeGesture));
+                    }
                     activeGesture.Deactivate();
                     activeGesture = null;
                 }
                 else if (activeGesture.IsOut(skeleton))
                 {
-                    GestureLeft.Invoke(this, new GestureEventArgs(activeGesture));
+                    if (GestureLeft != null)
+                    {
+                        GestureLeft.Invoke(this, new GestureEventArgs(activeGesture));
+                    }
                     activeGesture.Deactivate();
                     activeGesture = null;
                 }
@@ -75,7 +78,10 @@ namespace SkeletalTracking.Gestures
                 if (maxGesture != null)
                 {
                     activeGesture = maxGesture;
-                    GestureStarted.Invoke(this, new GestureEventArgs(activeGesture));
+                    if (GestureStarted != null)
+                    {
+                        GestureStarted.Invoke(this, new GestureEventArgs(activeGesture));
+                    }
                     activeGesture.Activate();
                 }
             }
