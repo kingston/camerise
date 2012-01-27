@@ -7,8 +7,51 @@
              d:DesignHeight="480" d:DesignWidth="640">
     <Grid Loaded="Grid_Loaded">
         <Canvas Name="MainCanvas" Height="480" Width="640">
-            <Image Opacity="0.1" Canvas.Left="0" Canvas.Top="0" Height="480 " Name="uxBackgroundImage" Stretch="Fill" Width="640" />
-            <Label Content="No data detected" Height="307" HorizontalAlignment="Left" Margin="52,350,0,0" Name="uxDiagnosticLabel" VerticalAlignment="Top" Width="323" Canvas.Left="-25" Canvas.Top="-270" />
+            <Image Opacity="0.1" Canvas.Left="0" Canvas.Top="0" Height="480 " Name="image1" Stretch="Fill" Width="640" ImageFailed="image1_ImageFailed" />
+            <TextBlock Name="takePhotoIndicator" Text="Take Photo" Height="79" Width="242" Padding="27,10,0,0" Canvas.Left="6" Canvas.Top="78" FontSize="40" TextAlignment="Center">
+          <TextBlock.Background>
+            <VisualBrush>
+              <VisualBrush.Visual>
+                 <Ellipse Height="65" Width="65" Fill="#FFFF3800" Stroke="Black" />
+              </VisualBrush.Visual>
+            </VisualBrush>
+          </TextBlock.Background></TextBlock>
+            <TextBlock Name="settingsIndicator" Text="Settings" Height="81" Width="242" Padding="27,10,0,0" Canvas.Left="6" Canvas.Top="294" FontSize="40" TextAlignment="Center">
+          <TextBlock.Background>
+            <VisualBrush>
+              <VisualBrush.Visual>
+                 <Ellipse Height="65" Width="65" Fill="#FFFF3800" Stroke="Black" />
+              </VisualBrush.Visual>
+            </VisualBrush>
+          </TextBlock.Background></TextBlock>
+            <TextBlock Name="viewLastIndicator" Text="View Last" Height="75" Width="242" Padding="27,10,0,0" Canvas.Left="6" Canvas.Top="184" FontSize="40" TextAlignment="Center">
+          <TextBlock.Background>
+            <VisualBrush>
+              <VisualBrush.Visual>
+                 <Ellipse Height="75" Width="75" Fill="#FFFF3800" Stroke="Black" />
+              </VisualBrush.Visual>
+            </VisualBrush>
+          </TextBlock.Background></TextBlock>
+            <Ellipse Canvas.Left="487" Canvas.Top="126" Height="50" Name="headEllipse" Stroke="Black" Width="50" Fill="Orange" />
+            <Ellipse Canvas.Left="601" Canvas.Top="253" Height="35" Name="rightEllipse" Stroke="Black" Width="35" Fill="Blue" />
+            <Ellipse Canvas.Left="375" Canvas.Top="253" Fill="Blue" Height="35" Name="leftEllipse" Stroke="Black" Width="35" />
+            <Ellipse Canvas.Left="499" Canvas.Top="174" Fill="PaleGoldenrod" Height="25" Name="shoulderCenter" Stroke="Black" Width="25" />
+            <Ellipse Canvas.Left="530" Canvas.Top="182" Fill="SpringGreen" Height="18" Name="shoulderRight" Stroke="Black" Width="16" />
+            <Ellipse Canvas.Left="462" Canvas.Top="182" Fill="SpringGreen" Height="18" Name="shoulderLeft" Stroke="Black" Width="17" />
+            <Ellipse Canvas.Left="441" Canvas.Top="373" Fill="Salmon" Height="16" Name="ankleLeft" Stroke="Black" Width="16" />
+            <Ellipse Canvas.Left="530" Canvas.Top="381" Fill="Salmon" Height="16" Name="ankleRight" Stroke="Black" Width="16" />
+            <Ellipse Canvas.Left="431" Canvas.Top="381" Fill="SpringGreen" Height="26" Name="footLeft" Stroke="Black" Width="26" />
+            <Ellipse Canvas.Left="538" Canvas.Top="390" Fill="SpringGreen" Height="26" Name="footRight" Stroke="Black" Width="26" />
+            <Ellipse Canvas.Left="394" Canvas.Top="253" Fill="Salmon" Height="16" Name="wristLeft" Stroke="Black" Width="16" />
+            <Ellipse Canvas.Left="601" Canvas.Top="243" Fill="Salmon" Height="16" Name="wristRight" Stroke="Black" Width="16" />
+            <Ellipse Canvas.Left="423" Canvas.Top="220" Fill="Bisque" Height="16" Name="elbowLeft" Stroke="Black" Width="16" />
+            <Ellipse Canvas.Left="574" Canvas.Top="220" Fill="Bisque" Height="16" Name="elbowRight" Stroke="Black" Width="16" />
+            <Ellipse Canvas.Left="462" Canvas.Top="319" Fill="Bisque" Height="16" Name="kneeLeft" Stroke="Black" Width="16" />
+            <Ellipse Canvas.Left="521" Canvas.Top="319" Fill="Bisque" Height="16" Name="kneeRight" Stroke="Black" Width="16" />
+            <Ellipse Canvas.Left="499" Canvas.Top="253" Fill="BlueViolet" Height="16" Name="hipCenter" Stroke="Black" Width="16" />
+            <Label Canvas.Left="0" Canvas.Top="0" Content="Current Controller:" Height="28" Name="label1" Width="108" />
+            <Label Canvas.Left="103" Canvas.Top="0" Content="Fun Controller" Height="28" Name="controllerText" Width="140" />
+            <TextBlock Canvas.Left="377" Canvas.Top="5" Height="17" Name="textBlock1" Text="(Use keyboard {1, 2, 3} to change controllers)" Width="249" />
         </Canvas>
     </Grid>
 </UserControl>
