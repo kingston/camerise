@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using Microsoft.Research.Kinect.Nui;
 using Coding4Fun.Kinect.Wpf;
 using SkeletalTracking.Gestures;
+using System.Windows.Media.Animation;
 
 namespace SkeletalTracking
 {
@@ -54,14 +55,13 @@ namespace SkeletalTracking
                         diagnosticInfo += getJointString(skeleton, id);
                     }
                     diagnosticInfo += "Funky Stuff:\n";
-                    diagnosticInfo += 
 
                     uxDiagnosticLabel.Content = diagnosticInfo;
                 }
                 recognizer.ProcessSkeleton(skeleton);
             }
             else
-            {
+            { 
                 uxDiagnosticLabel.Content = "No skeleton detected currently";
             }
         }
@@ -85,11 +85,68 @@ namespace SkeletalTracking
             recognizer.AddGesture(new ShutterGesture());
             recognizer.AddGesture(new ThrustGesture());
             recognizer.GestureCompleted += new GestureRecognizer.GestureEventHandler(recognizer_GestureCompleted);
+            recognizer.GestureLeft += new GestureRecognizer.GestureEventHandler(recognizer_GestureLeft);
+            recognizer.GestureStarted += new GestureRecognizer.GestureEventHandler(recognizer_GestureStarted);
+        }
+
+        void recognizer_GestureLeft(object sender, GestureEventArgs e)
+        {
+            Button curButton = GestureToButton(e.Gesture);
+            curButton.Background = new SolidColorBrush(Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF));
+            //curButton.Background = new SolidColorBrush(Color.FromArgb("#33FFFFFF"));
+        }
+
+        void recognizer_GestureStarted(object sender, GestureEventArgs e)
+        {
+            Button curButton = GestureToButton(e.Gesture);
+            curButton.Background = new SolidColorBrush(Color.FromArgb(0x88, 0xFF, 0xFF, 0xFF));
         }
 
         void recognizer_GestureCompleted(object sender, GestureEventArgs e)
         {
-            MessageBox.Show("I got a gesture! " + e.Gesture.GetType().Name);
+            Button curButton = GestureToButton(e.Gesture);
+            curButton.Background = new SolidColorBrush(Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF));
+            DoubleAnimation da = new DoubleAnimation();
+            da.From = 100;
+            da.To = 0;
+            da.AccelerationRatio = 0.5;
+            da.Duration = new Duration(TimeSpan.FromSeconds(3));
+            uxSelectionLabel.Content = GestureToString(e.Gesture);
+            uxSelectionLabel.BeginAnimation(Label.OpacityProperty, da);
+        }
+
+        private string GestureToString(IGesture gesture)
+        {
+            if (gesture.GetType() == typeof(SwipeGesture))
+            {
+                return "Last photo voilà!";
+            }
+            else if (gesture.GetType() == typeof(ShutterGesture))
+            {
+                return "Photo taken!";
+            }
+            else if (gesture.GetType() == typeof(ThrustGesture))
+            {
+                return "Opening settings...";
+            }
+            return "Huh?";
+        }
+
+        private Button GestureToButton(IGesture gesture)
+        {
+            if (gesture.GetType() == typeof(SwipeGesture))
+            {
+                return uxViewLastButton;
+            }
+            else if (gesture.GetType() == typeof(ShutterGesture))
+            {
+                return uxTakePhotoButton;
+            }
+            else if (gesture.GetType() == typeof(ThrustGesture))
+            {
+                return uxSettingsButton;
+            }
+            return null;
         }
     }
 }
