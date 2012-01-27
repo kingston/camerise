@@ -15,6 +15,7 @@ using Microsoft.Research.Kinect.Nui;
 using Coding4Fun.Kinect.Wpf;
 using SkeletalTracking.Gestures;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace SkeletalTracking
 {
@@ -26,11 +27,25 @@ namespace SkeletalTracking
         private Boolean DEBUG_MODE = true;
 
         private GestureRecognizer recognizer;
+        private DispatcherTimer countdownTimer = new DispatcherTimer();
    
 
         public MultiControl()
         {
             InitializeComponent();
+            countdownTimer.Interval = TimeSpan.FromSeconds(1);
+            countdownTimer.Tick += new EventHandler(countdownTimer_Tick);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            recognizer = new GestureRecognizer();
+            recognizer.AddGesture(new SwipeGesture());
+            recognizer.AddGesture(new ShutterGesture());
+            recognizer.AddGesture(new ThrustGesture());
+            recognizer.GestureCompleted += new GestureRecognizer.GestureEventHandler(recognizer_GestureCompleted);
+            recognizer.GestureLeft += new GestureRecognizer.GestureEventHandler(recognizer_GestureLeft);
+            recognizer.GestureStarted += new GestureRecognizer.GestureEventHandler(recognizer_GestureStarted);
         }
 
         public void processVideoFrame(ImageFrameReadyEventArgs e)
@@ -79,17 +94,6 @@ namespace SkeletalTracking
             // Do nothing for now
         }
 
-        private void Grid_Loaded(object sender, RoutedEventArgs e)
-        {
-            recognizer = new GestureRecognizer();
-            recognizer.AddGesture(new SwipeGesture());
-            recognizer.AddGesture(new ShutterGesture());
-            recognizer.AddGesture(new ThrustGesture());
-            recognizer.GestureCompleted += new GestureRecognizer.GestureEventHandler(recognizer_GestureCompleted);
-            recognizer.GestureLeft += new GestureRecognizer.GestureEventHandler(recognizer_GestureLeft);
-            recognizer.GestureStarted += new GestureRecognizer.GestureEventHandler(recognizer_GestureStarted);
-        }
-
         void recognizer_GestureStarted(object sender, GestureEventArgs e)
         {
             Button curButton = GestureToButton(e.Gesture);
@@ -114,38 +118,44 @@ namespace SkeletalTracking
             }
             else if (gesture.GetType() == typeof(ShutterGesture))
             {
-                if (OnTakePhotoActivated != null)
-                    OnTakePhotoActivated(this, EventArgs.Empty);
+                ActivateCameraTimer();
             }
             else if (gesture.GetType() == typeof(ThrustGesture))
             {
                 if (OnSettingsActivated != null)
                     OnSettingsActivated(this, EventArgs.Empty);
             }
-            //DoubleAnimation da = new DoubleAnimation();
-            //da.From = 100;
-            //da.To = 0;
-            //da.AccelerationRatio = 0.5;
-            //da.Duration = new Duration(TimeSpan.FromSeconds(3));
-            //uxSelectionLabel.Content = GestureToString(e.Gesture);
-            //uxSelectionLabel.BeginAnimation(Label.OpacityProperty, da);
         }
 
-        private string GestureToString(IGesture gesture)
+        private int timeLeft = -1;
+
+        private void ActivateCameraTimer()
         {
-            if (gesture.GetType() == typeof(SwipeGesture))
+            // Avoid duplicate camera actions
+            if (timeLeft < 0)
             {
-                return "Last photo voilà!";
+                uxCountdownOverlayCanvas.Visibility = System.Windows.Visibility.Visible;
+                timeLeft = 3;
+                countdownTimer_Tick(null, EventArgs.Empty); //Manually trigger event
+                countdownTimer.Start();
             }
-            else if (gesture.GetType() == typeof(ShutterGesture))
+        }
+
+        void countdownTimer_Tick(object sender, EventArgs e)
+        {
+            if (timeLeft > 0)
             {
-                return "Photo taken!";
+                uxCountdownLabel.Content = timeLeft + "...";
+                timeLeft--;
             }
-            else if (gesture.GetType() == typeof(ThrustGesture))
+            else if (timeLeft == 0)
             {
-                return "Opening settings...";
+                uxCountdownOverlayCanvas.Visibility = System.Windows.Visibility.Collapsed;
+                if (OnTakePhotoActivated != null)
+                    OnTakePhotoActivated(this, EventArgs.Empty);
+                timeLeft--;
+                countdownTimer.Stop();
             }
-            return "Huh?";
         }
 
         private Button GestureToButton(IGesture gesture)

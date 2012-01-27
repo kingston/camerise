@@ -82,29 +82,38 @@ namespace SkeletalTracking
             imageSb.Begin();
         }
 
+        /// <summary>
+        /// Provided to make sure multiple photos aren't taken at once
+        /// </summary>
+        private DateTime lastPhotoTaken = DateTime.MinValue;
+
         void control_OnTakePhotoActivated(object sender, EventArgs e)
         {
-            // Flash it
-            DoubleAnimation flashAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(100)));
-            Storyboard.SetTarget(flashAnimation, uxFlashRectangle);
-            Storyboard.SetTargetProperty(flashAnimation, new PropertyPath(UIElement.OpacityProperty));
-            Storyboard sb = new Storyboard();
-            sb.Children.Add(flashAnimation);
-            sb.Begin();
+            if (DateTime.Now.Subtract(lastPhotoTaken).TotalMilliseconds > 1000)
+            {
+                // Flash it
+                DoubleAnimation flashAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(100)));
+                Storyboard.SetTarget(flashAnimation, uxFlashRectangle);
+                Storyboard.SetTargetProperty(flashAnimation, new PropertyPath(UIElement.OpacityProperty));
+                Storyboard sb = new Storyboard();
+                sb.Children.Add(flashAnimation);
+                sb.Begin();
 
-            // Actually take photo
-            uxTakenImage.Source = lastSource;
-            uxTakenImage.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
-            uxTakenImage.Opacity = 1;
+                // Actually take photo
+                uxTakenImage.Source = lastSource;
+                uxTakenImage.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+                uxTakenImage.Opacity = 1;
 
-            // Hide it when we're done
-            DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(500)));
-            imageAnimation.BeginTime = TimeSpan.FromSeconds(2);
-            Storyboard.SetTarget(imageAnimation, uxTakenImage);
-            Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
-            Storyboard imageSb = new Storyboard();
-            imageSb.Children.Add(imageAnimation);
-            imageSb.Begin();
+                // Hide it when we're done
+                DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(500)));
+                imageAnimation.BeginTime = TimeSpan.FromSeconds(2);
+                Storyboard.SetTarget(imageAnimation, uxTakenImage);
+                Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
+                Storyboard imageSb = new Storyboard();
+                imageSb.Children.Add(imageAnimation);
+                imageSb.Begin();
+                lastPhotoTaken = DateTime.Now;
+            }
         }
 
         private void SetupKinect()
@@ -171,6 +180,7 @@ namespace SkeletalTracking
             }
 
             this.Title = "Current Controller: " + control.GetType().Name;
+            uxCurrentController.Content = control.GetType().Name;
             (control as Control).Visibility = System.Windows.Visibility.Visible;
             currentControl = control;
             control.activateControl();

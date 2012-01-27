@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="480" d:DesignWidth="640">
+             d:DesignHeight="480" d:DesignWidth="640"
+             Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <Style x:Key="ActionButton" TargetType="Button">
             <!--
@@ -30,17 +31,15 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid Loaded="Grid_Loaded">
-        <Canvas Name="MainCanvas" Height="480" Width="640" Background="#003375">
-            <Image Opacity="0.1" Canvas.Left="0" Canvas.Top="0" Height="480" Name="uxBackgroundImage" Stretch="Fill" Width="640" />
-            <Label Canvas.Left="0" Canvas.Top="0" Foreground="White" Content="Current Controller:" Height="28" Name="label1" Width="108" />
-            <Label Canvas.Left="103" Canvas.Top="0" Foreground="White" Content="Fun Controller" Height="28" Name="controllerText" Width="140" />
-            <TextBlock Canvas.Left="377" Canvas.Top="5" Height="17" Foreground="White" Name="textBlock1" Text="(Use keyboard {1, 2, 3} to change controllers)" Width="249" />
-            <Label Canvas.Left="6" Canvas.Top="325" Content="Diagnostic Label" Foreground="White" Height="323" Name="uxDiagnosticLabel" Width="343" />
-            <Button Canvas.Left="16" Canvas.Top="55" Content="Take Photo" Height="114" Name="uxTakePhotoButton" Width="193" Style="{StaticResource ActionButton}" />
-            <Button Canvas.Left="223" Canvas.Top="55" Content="View Last" Height="114" Name="uxViewLastButton" Width="193" Style="{StaticResource ActionButton}" />
-            <Button Canvas.Left="433" Canvas.Top="55" Content="Settings" Height="114" Name="uxSettingsButton" Style="{StaticResource ActionButton}" Width="193" />
-            <Label Canvas.Left="130" Canvas.Top="275" Content="Selection" Opacity="0" FontWeight="Bold" FontSize="30" Foreground="White" HorizontalContentAlignment="Center" Height="98" Name="uxSelectionLabel" Width="350" />
+    <Canvas Name="MainCanvas" Height="480" Width="640" Background="#003375">
+        <Image Opacity="0.1" Canvas.Left="0" Canvas.Top="0" Height="480" Name="uxBackgroundImage" Stretch="Fill" Width="640" />
+        <Label Canvas.Left="6" Canvas.Top="325" Content="Diagnostic Label" Foreground="White" Height="323" Name="uxDiagnosticLabel" Width="343" />
+        <Button Canvas.Left="16" Canvas.Top="55" Content="Take Photo" Height="114" Name="uxTakePhotoButton" Width="193" Style="{StaticResource ActionButton}" />
+        <Button Canvas.Left="223" Canvas.Top="55" Content="View Last" Height="114" Name="uxViewLastButton" Width="193" Style="{StaticResource ActionButton}" />
+        <Button Canvas.Left="433" Canvas.Top="55" Content="Settings" Height="114" Name="uxSettingsButton" Style="{StaticResource ActionButton}" Width="193" />
+        <Canvas Width="640" Height="480" Name="uxCountdownOverlayCanvas" Visibility="Collapsed">
+            <Rectangle Name="uxCountdownOverlayRectangle" Canvas.Left="0" Canvas.Top="0" Height="480" Fill="#CC000044" Width="640" />
+            <Label Canvas.Left="150" Canvas.Top="211" FontSize="30" Foreground="White" FontWeight="Bold" Content="Countdown" HorizontalContentAlignment="Center" Height="56" Name="uxCountdownLabel" Width="335" />
         </Canvas>
-    </Grid>
+    </Canvas>
 </UserControl>

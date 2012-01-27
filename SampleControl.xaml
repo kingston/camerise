@@ -94,8 +94,5 @@
             </VisualBrush>
           </TextBlock.Background>
         </TextBlock>
-        <Label Canvas.Left="0" Canvas.Top="0" Content="Current Controller:" Height="28" Name="label1" Width="108" />
-        <Label Canvas.Left="103" Canvas.Top="0" Content="Sample Controller" Height="28" Name="controllerText" Width="140" />
-        <TextBlock Canvas.Left="377" Canvas.Top="5" Height="17" Name="textBlock1" Text="(Use keyboard {1, 2, 3} to change controllers)" Width="249" />
     </Canvas>
 </UserControl>
