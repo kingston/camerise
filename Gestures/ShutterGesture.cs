@@ -34,7 +34,7 @@ namespace SkeletalTracking.Gestures
             hands.Add(skeleton.Joints[JointID.HandRight]);
             return hands;
         }
-
+        
         private bool AreUpperArmsHorizontal(List<Joint> elbows, List<Joint> shoulders)
         {
             for (int i = 0; i < 2; i++) 
@@ -65,13 +65,13 @@ namespace SkeletalTracking.Gestures
             }
             return false;
         }
-
+        
         private bool AreLowerArmsVertical(List<Joint> elbows, List<Joint> hands)
         {
             for (int i = 0; i < 2; i++) 
             {
                 if ((Math.Abs(elbows[i].Position.Z - hands[i].Position.Z) >= 0.2) ||
-                    (Math.Abs(elbows[i].Position.X - hands[i].Position.Z) >= 0.2)) {
+                    (Math.Abs(elbows[i].Position.X - hands[i].Position.X) >= 0.2)) {
                     return false;
                 }
             }
@@ -94,7 +94,7 @@ namespace SkeletalTracking.Gestures
             //Trigger:
             // elbow-shoulder y is close, elbow x is outside shoulder x
             // hand-elbow z is close, hand-elbow x is close, hand is above elbow
-            System.Diagnostics.Trace.WriteLine("Looking for shutter");
+            
             List<Joint> shoulders = GetShoulders(skeleton);
             List<Joint> elbows = GetElbows(skeleton);
             List<Joint> hands = GetHands(skeleton);
@@ -103,7 +103,6 @@ namespace SkeletalTracking.Gestures
                 AreLowerArmsVertical(elbows, hands) && AreHandsAboveElbows(elbows, hands))
             {
                 shutterWasClosed = false;
-                Console.WriteLine("Shutter engaged");
                 return 1.0;
             }
             return 0.0;
@@ -147,7 +146,6 @@ namespace SkeletalTracking.Gestures
                     AreLowerArmsVertical(elbows, hands) && AreHandsAboveElbows(elbows, hands))
                 {
                     shutterWasClosed = true;
-                    Console.WriteLine("Shutter closed");
                 }
                 return false;
             }
