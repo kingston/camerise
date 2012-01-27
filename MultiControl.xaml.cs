@@ -25,6 +25,7 @@ namespace SkeletalTracking
         private Boolean DEBUG_MODE = true;
 
         private GestureRecognizer recognizer;
+   
 
         public MultiControl()
         {
@@ -89,7 +90,25 @@ namespace SkeletalTracking
 
         void recognizer_GestureCompleted(object sender, GestureEventArgs e)
         {
-            MessageBox.Show("I got a gesture! " + e.Gesture.GetType().Name);
+            //MessageBox.Show("Detected: "+ e.Gesture.GetType().Name);
+
+            string currGesture = e.Gesture.GetType().Name;
+            if (currGesture.Equals("ThrustGesture"))
+            {
+                Target currTarget = new Target(takePhotoIndicator, 10);
+                currTarget.setTargetSelected();
+            }
+            if (currGesture.Equals("SwipeGesture")) 
+            {
+                Target currTarget = new Target(viewLastIndicator, 10);
+                currTarget.setTargetSelected();
+            }
+            if (currGesture.Equals("ShutterGesture")) 
+            {
+                Target currTarget = new Target(settingsIndicator, 10);
+                currTarget.setTargetSelected();
+            }
+
         }
     }
 }
