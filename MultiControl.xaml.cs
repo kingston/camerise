@@ -26,6 +26,7 @@ namespace SkeletalTracking
         private Boolean DEBUG_MODE = true;
 
         private GestureRecognizer recognizer;
+   
 
         public MultiControl()
         {
