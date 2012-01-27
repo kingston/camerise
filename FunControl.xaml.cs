@@ -78,10 +78,10 @@ namespace SkeletalTracking
             if (skeleton != null)
             {
                 //set positions on our joints of interest (already defined as Ellipse objects in the xaml)
-                SetEllipsePosition(headEllipse, skeleton.Joints[JointID.Head]);
+               // SetEllipsePosition(headEllipse, skeleton.Joints[JointID.Head]);
                 SetEllipsePosition(leftEllipse, skeleton.Joints[JointID.HandLeft]);
                 SetEllipsePosition(rightEllipse, skeleton.Joints[JointID.HandRight]);
-                SetEllipsePosition(shoulderCenter, skeleton.Joints[JointID.ShoulderCenter]);
+                /*SetEllipsePosition(shoulderCenter, skeleton.Joints[JointID.ShoulderCenter]);
                 SetEllipsePosition(shoulderRight, skeleton.Joints[JointID.ShoulderRight]);
                 SetEllipsePosition(shoulderLeft, skeleton.Joints[JointID.ShoulderLeft]);
                 SetEllipsePosition(ankleRight, skeleton.Joints[JointID.AnkleRight]);
@@ -99,7 +99,7 @@ namespace SkeletalTracking
                 SetEllipsePosition(wristRight, skeleton.Joints[JointID.WristRight]);
                 SetEllipsePosition(kneeLeft, skeleton.Joints[JointID.KneeLeft]);
                 SetEllipsePosition(kneeRight, skeleton.Joints[JointID.KneeRight]);
-                SetEllipsePosition(hipCenter, skeleton.Joints[JointID.HipCenter]);
+                SetEllipsePosition(hipCenter, skeleton.Joints[JointID.HipCenter]);*/
                 currentController.processSkeletonFrame(skeleton, targets);
 
             }

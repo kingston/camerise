@@ -150,6 +150,10 @@ namespace SkeletalTracking
         public void setPairSelected()
         {
             _target_color = new SolidColorBrush(Color.FromRgb(34, 139, 34));
+            if (id == 1 || id == 2)
+            {
+                MessageBox.Show("I'M TAKING YO PICTURE");
+            }
             _canvasEl.Background = new VisualBrush(generateEllipse((double)_canvasEl.GetValue(Canvas.WidthProperty) / 2, _target_color));
         }
 
