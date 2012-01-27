@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using Microsoft.Research.Kinect.Nui;
 using Coding4Fun.Kinect.Wpf;
 using SkeletalTracking.Interfaces;
+using System.Windows.Media.Animation;
 
 namespace SkeletalTracking
 {
@@ -26,6 +27,9 @@ namespace SkeletalTracking
     public partial class MainWindow : Window
     {
         private IGestureControl currentControl;
+        private IGestureControl[] gestureControls;
+
+        private BitmapSource lastSource = null;
 
         public MainWindow()
         {
@@ -37,8 +41,70 @@ namespace SkeletalTracking
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            gestureControls = new IGestureControl[] { funControl, multiControl, sampleControl };
+            // Attach event handlers
+            foreach (IGestureControl control in gestureControls)
+            {
+                control.OnTakePhotoActivated += new EventHandler(control_OnTakePhotoActivated);
+                control.OnLastPhotoActivated += new EventHandler(control_OnLastPhotoActivated);
+                control.OnSettingsActivated += new EventHandler(control_OnSettingsActivated);
+            }
             changeCurrentControl(funControl);
             SetupKinect();
+        }
+
+        void control_OnLastPhotoActivated(object sender, EventArgs e)
+        {
+            uxTakenImage.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+            uxTakenImage.Opacity = 1;
+
+            // Hide it when we're done
+            DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(500)));
+            imageAnimation.BeginTime = TimeSpan.FromSeconds(3);
+            Storyboard.SetTarget(imageAnimation, uxTakenImage);
+            Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard imageSb = new Storyboard();
+            imageSb.Children.Add(imageAnimation);
+            imageSb.Begin();
+        }
+
+        void control_OnSettingsActivated(object sender, EventArgs e)
+        {
+            uxSettingsOverlayCanvas.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+            uxSettingsOverlayCanvas.Opacity = 1;
+            // Hide it when we're done
+            DoubleAnimation fadeOutAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(500)));
+            fadeOutAnimation.BeginTime = TimeSpan.FromSeconds(1.5);
+            Storyboard.SetTarget(fadeOutAnimation, uxSettingsOverlayCanvas);
+            Storyboard.SetTargetProperty(fadeOutAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard imageSb = new Storyboard();
+            imageSb.Children.Add(fadeOutAnimation);
+            imageSb.Begin();
+        }
+
+        void control_OnTakePhotoActivated(object sender, EventArgs e)
+        {
+            // Flash it
+            DoubleAnimation flashAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(100)));
+            Storyboard.SetTarget(flashAnimation, uxFlashRectangle);
+            Storyboard.SetTargetProperty(flashAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard sb = new Storyboard();
+            sb.Children.Add(flashAnimation);
+            sb.Begin();
+
+            // Actually take photo
+            uxTakenImage.Source = lastSource;
+            uxTakenImage.BeginAnimation(UIElement.OpacityProperty, null); // reset animation
+            uxTakenImage.Opacity = 1;
+
+            // Hide it when we're done
+            DoubleAnimation imageAnimation = new DoubleAnimation(1, 0, new Duration(TimeSpan.FromMilliseconds(500)));
+            imageAnimation.BeginTime = TimeSpan.FromSeconds(2);
+            Storyboard.SetTarget(imageAnimation, uxTakenImage);
+            Storyboard.SetTargetProperty(imageAnimation, new PropertyPath(UIElement.OpacityProperty));
+            Storyboard imageSb = new Storyboard();
+            imageSb.Children.Add(imageAnimation);
+            imageSb.Begin();
         }
 
         private void SetupKinect()
@@ -80,6 +146,7 @@ namespace SkeletalTracking
 
         void nui_VideoFrameReady(object sender, ImageFrameReadyEventArgs e)
         {
+            lastSource = e.ImageFrame.ToBitmapSource();
             currentControl.processVideoFrame(e);
         }
 
@@ -98,9 +165,10 @@ namespace SkeletalTracking
 
         private void changeCurrentControl(IGestureControl control)
         {
-            sampleControl.Visibility = System.Windows.Visibility.Collapsed;
-            funControl.Visibility = System.Windows.Visibility.Collapsed;
-            multiControl.Visibility = System.Windows.Visibility.Collapsed;
+            foreach (Control gestureControl in gestureControls)
+            {
+                gestureControl.Visibility = System.Windows.Visibility.Collapsed;
+            }
 
             this.Title = "Current Controller: " + control.GetType().Name;
             (control as Control).Visibility = System.Windows.Visibility.Visible;

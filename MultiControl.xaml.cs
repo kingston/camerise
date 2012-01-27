@@ -90,30 +90,45 @@ namespace SkeletalTracking
             recognizer.GestureStarted += new GestureRecognizer.GestureEventHandler(recognizer_GestureStarted);
         }
 
-        void recognizer_GestureLeft(object sender, GestureEventArgs e)
-        {
-            Button curButton = GestureToButton(e.Gesture);
-            curButton.Background = new SolidColorBrush(Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF));
-            //curButton.Background = new SolidColorBrush(Color.FromArgb("#33FFFFFF"));
-        }
-
         void recognizer_GestureStarted(object sender, GestureEventArgs e)
         {
             Button curButton = GestureToButton(e.Gesture);
             curButton.Background = new SolidColorBrush(Color.FromArgb(0x88, 0xFF, 0xFF, 0xFF));
         }
 
+        void recognizer_GestureLeft(object sender, GestureEventArgs e)
+        {
+            Button curButton = GestureToButton(e.Gesture);
+            curButton.Background = new SolidColorBrush(Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF));
+        }
+
         void recognizer_GestureCompleted(object sender, GestureEventArgs e)
         {
             Button curButton = GestureToButton(e.Gesture);
             curButton.Background = new SolidColorBrush(Color.FromArgb(0x33, 0xFF, 0xFF, 0xFF));
-            DoubleAnimation da = new DoubleAnimation();
-            da.From = 100;
-            da.To = 0;
-            da.AccelerationRatio = 0.5;
-            da.Duration = new Duration(TimeSpan.FromSeconds(3));
-            uxSelectionLabel.Content = GestureToString(e.Gesture);
-            uxSelectionLabel.BeginAnimation(Label.OpacityProperty, da);
+            IGesture gesture = e.Gesture;
+            if (gesture.GetType() == typeof(SwipeGesture))
+            {
+                if (OnLastPhotoActivated != null)
+                    OnLastPhotoActivated(this, EventArgs.Empty);
+            }
+            else if (gesture.GetType() == typeof(ShutterGesture))
+            {
+                if (OnTakePhotoActivated != null)
+                    OnTakePhotoActivated(this, EventArgs.Empty);
+            }
+            else if (gesture.GetType() == typeof(ThrustGesture))
+            {
+                if (OnSettingsActivated != null)
+                    OnSettingsActivated(this, EventArgs.Empty);
+            }
+            //DoubleAnimation da = new DoubleAnimation();
+            //da.From = 100;
+            //da.To = 0;
+            //da.AccelerationRatio = 0.5;
+            //da.Duration = new Duration(TimeSpan.FromSeconds(3));
+            //uxSelectionLabel.Content = GestureToString(e.Gesture);
+            //uxSelectionLabel.BeginAnimation(Label.OpacityProperty, da);
         }
 
         private string GestureToString(IGesture gesture)
@@ -149,5 +164,12 @@ namespace SkeletalTracking
             }
             return null;
         }
+
+
+        public event EventHandler OnTakePhotoActivated;
+
+        public event EventHandler OnLastPhotoActivated;
+
+        public event EventHandler OnSettingsActivated;
     }
 }

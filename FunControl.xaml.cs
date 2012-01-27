@@ -38,7 +38,28 @@ namespace SkeletalTracking
             //Force video to the background
             Canvas.SetZIndex(image1, -10000);
             currentController = new FunController();
+            currentController.OnLastPhotoActivated += new EventHandler(currentController_OnLastPhotoActivated);
+            currentController.OnSettingsActivated += new EventHandler(currentController_OnSettingsActivated);
+            currentController.OnTakePhotoActivated += new EventHandler(currentController_OnTakePhotoActivated);
             InitTargets();
+        }
+
+        void currentController_OnTakePhotoActivated(object sender, EventArgs e)
+        {
+            if (OnTakePhotoActivated != null)
+                OnTakePhotoActivated(this, EventArgs.Empty);
+        }
+
+        void currentController_OnSettingsActivated(object sender, EventArgs e)
+        {
+            if (OnSettingsActivated != null)
+                OnSettingsActivated(this, EventArgs.Empty);
+        }
+
+        void currentController_OnLastPhotoActivated(object sender, EventArgs e)
+        {
+            if (OnLastPhotoActivated != null)
+                OnLastPhotoActivated(this, EventArgs.Empty);
         }
 
         private void InitTargets()
@@ -123,5 +144,11 @@ namespace SkeletalTracking
         {
             //throw new NotImplementedException();
         }
+
+        public event EventHandler OnTakePhotoActivated;
+
+        public event EventHandler OnLastPhotoActivated;
+
+        public event EventHandler OnSettingsActivated;
     }
 }

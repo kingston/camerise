@@ -3,9 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:camerise="clr-namespace:SkeletalTracking"
         Title="MainWindow" Height="480" Width="640" Closed="Window_Closed" Loaded="Window_Loaded" KeyDown="Window_KeyDown">
-    <Grid>
+    <Canvas Height="480" Width="640">
         <camerise:SampleControl x:Name="sampleControl" Visibility="Collapsed" />
         <camerise:FunControl x:Name="funControl" />
         <camerise:MultiControl x:Name="multiControl" Visibility="Collapsed" />
-    </Grid>
+        <Image Opacity="0" Name="uxTakenImage" Source="default.jpg" Canvas.Left="0" Canvas.Top="0" Height="480" Stretch="Fill" Width="640" />
+        <Rectangle Name="uxFlashRectangle" Canvas.Left="0" Canvas.Top="0" Height="480" Fill="White" Opacity="0" Width="640" />
+        <Canvas Width="640" Height="480" Name="uxSettingsOverlayCanvas" Opacity="0">
+            <Rectangle Name="uxSettingsOverlayRectangle" Canvas.Left="0" Canvas.Top="0" Height="480" Fill="#CC000044" Width="640" />
+            <Label Canvas.Left="150" Canvas.Top="211" FontSize="30" Foreground="White" Content="Settings Menu Activated" Height="56" Name="uxSettingsMenu" Width="335" />
+        </Canvas>
+    </Canvas>
 </Window>

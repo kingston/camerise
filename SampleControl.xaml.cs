@@ -121,5 +121,11 @@ namespace SkeletalTracking
         {
             //throw new NotImplementedException();
         }
+
+        public event EventHandler OnTakePhotoActivated;
+
+        public event EventHandler OnLastPhotoActivated;
+
+        public event EventHandler OnSettingsActivated;
     }
 }

@@ -26,6 +26,11 @@ namespace SkeletalTracking.Gestures
         private const int HOLD_TIME = 1000;
         private DateTime startGestureTime;
 
+        /// <summary>
+        /// True if the gesture was completed but the hand never went back down (to avoid duplicate gestures from same motion)
+        /// </summary>
+        private bool hasGestureEscaped = true;
+
         private bool IsRightArmThrusting(SkeletonData skeleton)
         {
             Joint handRight = skeleton.Joints[JointID.HandRight];
@@ -45,10 +50,11 @@ namespace SkeletalTracking.Gestures
 
         public override double GetTriggerScore(SkeletonData skeleton)
         {
-            if (IsRightArmThrusting(skeleton))
+            if (IsRightArmThrusting(skeleton) && hasGestureEscaped)
             {
                 return 1.0;
             }
+            hasGestureEscaped = true;
             return 0.0;
         }
 
@@ -59,7 +65,12 @@ namespace SkeletalTracking.Gestures
 
         public override bool IsComplete(SkeletonData skeleton)
         {
-            return DateTime.Now.Subtract(this.startGestureTime).TotalMilliseconds > HOLD_TIME;
+            if (DateTime.Now.Subtract(this.startGestureTime).TotalMilliseconds > HOLD_TIME)
+            {
+                hasGestureEscaped = false;
+                return true;
+            }
+            return false;
         }
     }
 }

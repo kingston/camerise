@@ -29,7 +29,9 @@ namespace SkeletalTracking
 
         }
 
-
+        public event EventHandler OnTakePhotoActivated;
+        public event EventHandler OnLastPhotoActivated;
+        public event EventHandler OnSettingsActivated;
 
         //This function will be implemented by you in the subclass files provided.
         //A simple example of highlighting targets when hovered over has been provided below
@@ -69,6 +71,24 @@ namespace SkeletalTracking
                     if (selectedTargets[cur.pairID-1])
                     {
                         cur.setPairSelected();
+                        switch (cur.id)
+                        {
+                            case 1:
+                            case 2:
+                                if (OnTakePhotoActivated != null)
+                                    OnTakePhotoActivated(this, EventArgs.Empty);
+                                break;
+                            case 3:
+                            case 4:
+                                if (OnLastPhotoActivated != null)
+                                    OnLastPhotoActivated(this, EventArgs.Empty);
+                                break;
+                            case 5:
+                            case 6:
+                                if (OnSettingsActivated != null)
+                                    OnSettingsActivated(this, EventArgs.Empty);
+                                break;
+                        }
                         //Target buddy = targets[cur.pairID];
                        // buddy.setPairSelected();
                         
@@ -150,10 +170,10 @@ namespace SkeletalTracking
         public void setPairSelected()
         {
             _target_color = new SolidColorBrush(Color.FromRgb(34, 139, 34));
-            if (id == 1 || id == 2)
-            {
-                MessageBox.Show("I'M TAKING YO PICTURE");
-            }
+            //if (id == 1 || id == 2)
+            //{
+            //    MessageBox.Show("I'M TAKING YO PICTURE");
+            //}
             _canvasEl.Background = new VisualBrush(generateEllipse((double)_canvasEl.GetValue(Canvas.WidthProperty) / 2, _target_color));
         }
 

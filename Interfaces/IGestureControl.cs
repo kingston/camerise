@@ -16,5 +16,9 @@ namespace SkeletalTracking.Interfaces
         void processVideoFrame(ImageFrameReadyEventArgs e);
 
         void processSkeletonFrame(SkeletonFrame frame);
+
+        event EventHandler OnTakePhotoActivated;
+        event EventHandler OnLastPhotoActivated;
+        event EventHandler OnSettingsActivated;
     }
 }
