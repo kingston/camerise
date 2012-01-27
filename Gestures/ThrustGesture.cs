@@ -11,6 +11,7 @@ namespace SkeletalTracking.Gestures
     {
         public override void Activate()
         {
+            startGestureTime = DateTime.Now;
             Active = true;
         }
 
@@ -19,9 +20,11 @@ namespace SkeletalTracking.Gestures
             Active = false;
         }
 
-        private int HoldingFrames;
-        private int N_HOLD_FRAMES = 30;
-        private bool WasHolding = false;
+        /// <summary>
+        /// Time to hold the gesture until it gets completed (in milliseconds)
+        /// </summary>
+        private const int HOLD_TIME = 1000;
+        private DateTime startGestureTime;
 
         private bool IsRightArmThrusting(SkeletonData skeleton)
         {
@@ -29,7 +32,7 @@ namespace SkeletalTracking.Gestures
             Joint elbowRight = skeleton.Joints[JointID.ElbowRight];
             Joint shoulderRight = skeleton.Joints[JointID.ShoulderRight];
 
-            Vector boundingBox = CreateVector(0.1f, 0.1f, 10.0f);
+            Vector boundingBox = CreateVector(0.2f, 0.2f, 50.0f);
             Vector relativeToCentral = CreateVector(0, 0, 0);
 
             if (IsInBoundingBox(elbowRight.Position, shoulderRight.Position, relativeToCentral, boundingBox) &&
@@ -42,10 +45,8 @@ namespace SkeletalTracking.Gestures
 
         public override double GetTriggerScore(SkeletonData skeleton)
         {
-            if (IsRightArmThrusting(skeleton) && !WasHolding)
+            if (IsRightArmThrusting(skeleton))
             {
-                WasHolding = true;
-                HoldingFrames = 0;
                 return 1.0;
             }
             return 0.0;
@@ -53,22 +54,12 @@ namespace SkeletalTracking.Gestures
 
         public override bool IsOut(SkeletonData skeleton)
         {
-            if (IsRightArmThrusting(skeleton))
-            {
-                return false;
-            }
-            WasHolding = false;
-            return true;
+            return !IsRightArmThrusting(skeleton);
         }
 
         public override bool IsComplete(SkeletonData skeleton)
         {
-            HoldingFrames++;
-            if (HoldingFrames >= N_HOLD_FRAMES)
-            {
-                return true;
-            }
-            return false;
+            return DateTime.Now.Subtract(this.startGestureTime).TotalMilliseconds > HOLD_TIME;
         }
     }
 }

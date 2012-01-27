@@ -16,7 +16,7 @@ namespace SkeletalTracking.Gestures
             Joint central = skeleton.Joints[JointID.Spine];
 
             Vector boundingBox = CreateVector(0.2f, 0.2f, 10.0f);
-            Vector relativeToCentral = CreateVector(-0.3f, 0.6f, 0.3f);
+            Vector relativeToCentral = CreateVector(-0.3f, 0.4f, 0.3f);
 
             if (IsInBoundingBox(handRight.Position, central.Position, relativeToCentral, boundingBox))
             {
@@ -28,13 +28,27 @@ namespace SkeletalTracking.Gestures
         public override bool IsOut(SkeletonData skeleton)
         {
             if (!Active) return false;
-            return false;
+            Joint handRight = skeleton.Joints[JointID.HandRight];
+            Joint elbowRight = skeleton.Joints[JointID.ElbowRight];
+            Joint central = skeleton.Joints[JointID.Spine];
+
+            Vector boundingBox = CreateVector(2.0f, 0.2f, 10.0f);
+            Vector relativeToCentral = CreateVector(0f, 0.4f, 0.3f);
+
+            return (!IsInBoundingBox(handRight.Position, central.Position, relativeToCentral, boundingBox));
         }
 
         public override bool IsComplete(SkeletonData skeleton)
         {
             if (!Active) return false;
-            return true;
+            Joint handRight = skeleton.Joints[JointID.HandRight];
+            Joint elbowRight = skeleton.Joints[JointID.ElbowRight];
+            Joint central = skeleton.Joints[JointID.Spine];
+
+            Vector boundingBox = CreateVector(0.2f, 0.2f, 10.0f);
+            Vector relativeToCentral = CreateVector(0.3f, 0.4f, 0.3f);
+
+            return IsInBoundingBox(handRight.Position, central.Position, relativeToCentral, boundingBox);
         }
     }
 }

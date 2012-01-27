@@ -48,11 +48,14 @@ namespace SkeletalTracking
                 if (DEBUG_MODE)
                 {
                     String diagnosticInfo = "Diagnostic Info:\n";
-                    JointID[] diagIDs = { JointID.HandRight, JointID.ElbowRight, JointID.Spine };
+                    JointID[] diagIDs = { JointID.ShoulderRight, JointID.HandRight, JointID.ElbowRight, JointID.Spine };
                     foreach (var id in diagIDs)
                     {
                         diagnosticInfo += getJointString(skeleton, id);
                     }
+                    diagnosticInfo += "Funky Stuff:\n";
+                    diagnosticInfo += 
+
                     uxDiagnosticLabel.Content = diagnosticInfo;
                 }
                 recognizer.ProcessSkeleton(skeleton);

@@ -7,7 +7,7 @@
              d:DesignHeight="480" d:DesignWidth="640">
     <Grid Loaded="Grid_Loaded">
         <Canvas Name="MainCanvas" Height="480" Width="640">
-            <Image Opacity="0.1" Canvas.Left="0" Canvas.Top="0" Height="480 " Name="image1" Stretch="Fill" Width="640" ImageFailed="image1_ImageFailed" />
+            <Image Opacity="0.1" Canvas.Left="0" Canvas.Top="0" Height="480" Name="uxBackgroundImage" Stretch="Fill" Width="640" />
             <TextBlock Name="takePhotoIndicator" Text="Take Photo" Height="79" Width="242" Padding="27,10,0,0" Canvas.Left="6" Canvas.Top="78" FontSize="40" TextAlignment="Center">
           <TextBlock.Background>
             <VisualBrush>
@@ -52,6 +52,7 @@
             <Label Canvas.Left="0" Canvas.Top="0" Content="Current Controller:" Height="28" Name="label1" Width="108" />
             <Label Canvas.Left="103" Canvas.Top="0" Content="Fun Controller" Height="28" Name="controllerText" Width="140" />
             <TextBlock Canvas.Left="377" Canvas.Top="5" Height="17" Name="textBlock1" Text="(Use keyboard {1, 2, 3} to change controllers)" Width="249" />
+            <Label Canvas.Left="283" Canvas.Top="44" Content="Diagnostic Label" Height="323" Name="uxDiagnosticLabel" Width="343" />
         </Canvas>
     </Grid>
 </UserControl>
