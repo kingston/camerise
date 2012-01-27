@@ -37,17 +37,33 @@ namespace SkeletalTracking.Gestures
                     boxCenter.Z - size.Z / 2 < pt.Z && pt.Z < boxCenter.Z + size.Z / 2);
         }
 
+        protected static Vector CreateVector(float x, float y, float z)
+        {
+            return GestureExtensions.CreateVector(x, y, z);
+        }
+    }
+
+    public static class GestureExtensions
+    {
         public static Vector CreateVector(float x, float y, float z)
         {
             return new Vector() { X = x, Y = y, Z = z };
         }
-    }
 
-    public static class GestureExtensionClass
-    {
         public static Vector Add(this Vector vector1, Vector vector2)
         {
-            return new Vector() { X = vector1.X + vector2.X, Y = vector1.Y + vector2.Y, Z = vector1.Z + vector1.Z };
+            return CreateVector(vector1.X + vector2.X, vector1.Y + vector2.Y, vector1.Z + vector1.Z);
+        }
+
+        public static Vector Subtract(this Vector vector1, Vector vector2)
+        {
+            return CreateVector(vector1.X - vector2.X, vector1.Y - vector2.Y, vector1.Z - vector1.Z);
+        }
+
+        public static string ToReadableString(this Vector vector)
+        {
+            
+            return "X: " + vector.X + " | Y: " + vector.Y + " | Z: " + vector.Z;
         }
     }
 }
