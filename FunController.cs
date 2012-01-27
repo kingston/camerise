@@ -17,9 +17,19 @@ namespace SkeletalTracking
         public float k_xMaxJointScale = 1.5f;
         public float k_yMaxJointScale = 1.5f;
 
+        private List<bool> selectedTargets;
+
         public FunController()
         {
+            selectedTargets = new List<bool>();
+            for (int i = 0; i < 6; i++)
+            {
+                selectedTargets.Add(false);
+            }
+
         }
+
+
 
         //This function will be implemented by you in the subclass files provided.
         //A simple example of highlighting targets when hovered over has been provided below
@@ -51,13 +61,24 @@ namespace SkeletalTracking
                 double deltaY_right = Math.Abs(rightHand.Position.Y - cur.getYPosition());
 
                 //If we have a hit in a reasonable range, highlight the target
-                if (deltaX_left < 15 && deltaY_left < 15 || deltaX_right < 15 && deltaY_right < 15)
+                if (deltaX_left < 35 && deltaY_left < 35 || deltaX_right < 35 && deltaY_right < 35)
                 {
                     cur.setTargetSelected();
+                    selectedTargets[targetID-1] = true;
+                    
+                    if (selectedTargets[cur.pairID-1])
+                    {
+                        cur.setPairSelected();
+                        //Target buddy = targets[cur.pairID];
+                       // buddy.setPairSelected();
+                        
+                    }
+                    
                 }
                 else
                 {
                     cur.setTargetUnselected();
+                    selectedTargets[targetID-1] = false;
                 }
             }
 
@@ -91,13 +112,21 @@ namespace SkeletalTracking
 
         private Brush _target_color;
         private TextBlock _canvasEl;
-        
+        public int pairID;
 
         public Target(TextBlock target, int givenID)
         {
             _target_color = new SolidColorBrush(Colors.Red);
             _canvasEl = target;
             id = givenID;
+            showTarget();
+        }
+        public Target(TextBlock target, int givenID, int buddyID)
+        {
+            _target_color = new SolidColorBrush(Colors.Red);
+            _canvasEl = target;
+            id = givenID;
+            pairID = buddyID;
             showTarget();
         }
         public void setTargetPosition(double x, double y)
@@ -114,7 +143,17 @@ namespace SkeletalTracking
 
         public void setTargetSelected()
         {
+            _target_color = new SolidColorBrush(Color.FromRgb(255, 255, 0));
+            _canvasEl.Background = new VisualBrush(generateEllipse((double)_canvasEl.GetValue(Canvas.WidthProperty) / 2, _target_color));
+        }
+
+        public void setPairSelected()
+        {
             _target_color = new SolidColorBrush(Color.FromRgb(34, 139, 34));
+            if (id == 1 || id == 2)
+            {
+                MessageBox.Show("I'M TAKING YO PICTURE");
+            }
             _canvasEl.Background = new VisualBrush(generateEllipse((double)_canvasEl.GetValue(Canvas.WidthProperty) / 2, _target_color));
         }
 
@@ -131,7 +170,7 @@ namespace SkeletalTracking
 
         public void showTarget()
         {
-            _canvasEl.Visibility = Visibility.Visible;
+                _canvasEl.Visibility = Visibility.Visible;
         }
         public bool isHidden()
         {

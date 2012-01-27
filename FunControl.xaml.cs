@@ -43,17 +43,19 @@ namespace SkeletalTracking
 
         private void InitTargets()
         {
-            targets.Add(1, new Target(target1, 1));
-            targets.Add(2, new Target(target2, 2));
-            targets.Add(3, new Target(target3, 3));
-            targets.Add(4, new Target(target4, 4));
-            targets.Add(5, new Target(target5, 5));
+            targets.Add(1, new Target(target1, 1, 2));
+            targets.Add(2, new Target(target2, 2, 1));
+            targets.Add(3, new Target(target3, 3, 4));
+            targets.Add(4, new Target(target4, 4, 3));
+            targets.Add(5, new Target(target5, 5, 6));
+            targets.Add(6, new Target(target6, 6, 5));
             currentController.controllerActivated(targets);
             Canvas.SetZIndex(target1, 100);
             Canvas.SetZIndex(target2, 100);
             Canvas.SetZIndex(target3, 100);
             Canvas.SetZIndex(target4, 100);
             Canvas.SetZIndex(target5, 100);
+            Canvas.SetZIndex(target6, 100);
         }
 
         public void processVideoFrame(ImageFrameReadyEventArgs e)
@@ -76,10 +78,10 @@ namespace SkeletalTracking
             if (skeleton != null)
             {
                 //set positions on our joints of interest (already defined as Ellipse objects in the xaml)
-                SetEllipsePosition(headEllipse, skeleton.Joints[JointID.Head]);
+               // SetEllipsePosition(headEllipse, skeleton.Joints[JointID.Head]);
                 SetEllipsePosition(leftEllipse, skeleton.Joints[JointID.HandLeft]);
                 SetEllipsePosition(rightEllipse, skeleton.Joints[JointID.HandRight]);
-                SetEllipsePosition(shoulderCenter, skeleton.Joints[JointID.ShoulderCenter]);
+                /*SetEllipsePosition(shoulderCenter, skeleton.Joints[JointID.ShoulderCenter]);
                 SetEllipsePosition(shoulderRight, skeleton.Joints[JointID.ShoulderRight]);
                 SetEllipsePosition(shoulderLeft, skeleton.Joints[JointID.ShoulderLeft]);
                 SetEllipsePosition(ankleRight, skeleton.Joints[JointID.AnkleRight]);
@@ -97,7 +99,7 @@ namespace SkeletalTracking
                 SetEllipsePosition(wristRight, skeleton.Joints[JointID.WristRight]);
                 SetEllipsePosition(kneeLeft, skeleton.Joints[JointID.KneeLeft]);
                 SetEllipsePosition(kneeRight, skeleton.Joints[JointID.KneeRight]);
-                SetEllipsePosition(hipCenter, skeleton.Joints[JointID.HipCenter]);
+                SetEllipsePosition(hipCenter, skeleton.Joints[JointID.HipCenter]);*/
                 currentController.processSkeletonFrame(skeleton, targets);
 
             }
